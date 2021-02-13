@@ -1,6 +1,7 @@
 package com.cinema.backend.services;
 
 import com.cinema.backend.dto.UserDto;
+import com.cinema.backend.exceptions.BadCredentialsException;
 import com.cinema.backend.exceptions.BadRequestException;
 import com.cinema.backend.exceptions.ConflictException;
 import com.cinema.backend.exceptions.NotFoundException;
@@ -14,7 +15,8 @@ public interface UserService extends UserDetailsService {
     List<User> getUsers( int page, int size );
     List<User> search( int page, int size , String firstName );
     User findById( UUID id ) throws NotFoundException;
-    User save( UserDto dto ) throws BadRequestException, ConflictException;
+    User save( UserDto dto ) throws BadRequestException, BadCredentialsException, ConflictException;
     User update( UUID id, UserDto dto ) throws BadRequestException, NotFoundException;
     void delete( UUID id ) throws NotFoundException;
+    User findByEmail( String email ) throws BadCredentialsException;
 }

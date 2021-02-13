@@ -1,4 +1,4 @@
-package com.cinema.backend.Security;
+package com.cinema.backend.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

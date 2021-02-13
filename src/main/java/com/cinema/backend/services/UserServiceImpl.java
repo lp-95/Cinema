@@ -1,6 +1,7 @@
 package com.cinema.backend.services;
 
 import com.cinema.backend.dto.UserDto;
+import com.cinema.backend.exceptions.BadCredentialsException;
 import com.cinema.backend.exceptions.BadRequestException;
 import com.cinema.backend.exceptions.ConflictException;
 import com.cinema.backend.exceptions.NotFoundException;
@@ -57,19 +58,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save( UserDto dto ) throws BadRequestException, ConflictException {
-        if ( findByEmail( dto.getEmail() ) != null ) {
-            throw new ConflictException( USER_ALREADY_EXIST.getErrorMessage() );
-        }
+    public User save( UserDto dto ) throws BadRequestException, BadCredentialsException, ConflictException {
+        checkUserExist( dto.getEmail() );
         checkDto( dto );
-        User user;
-        if ( dto.getAdmin() ) {
-            user = new Admin();
-        } else if ( dto.getTicketSeller() ) {
-            user = new TicketSeller();
-        } else {
-            user = new Customer();
-        }
+        User user = getAuthority( dto );
         user.setId( UUID.randomUUID() );
         user.setEmail( dto.getEmail() );
         user.setPassword( this.encoder.encode( dto.getPassword() ) );
@@ -98,7 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email ) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername( String email ) throws UsernameNotFoundException {
         User foundUser = this.userRepository.getByEmail( email )
                 .orElseThrow( () -> new UsernameNotFoundException( BAD_CREDENTIALS.getErrorMessage() ) );
         return org.springframework.security.core.userdetails
@@ -109,8 +101,14 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    public User findByEmail( String email ) {
-        return this.userRepository.findByEmail( email );
+    @Override
+    public User findByEmail( String email ) throws BadCredentialsException {
+        if ( email == null )
+            throw new BadCredentialsException( NULL_POINT_EXCEPTION.getErrorMessage() );
+        User user = this.userRepository.findByEmail( email );
+        if ( user == null )
+            throw new BadCredentialsException( USER_NOT_EXIST.getErrorMessage() );
+        return user;
     }
 
     private void checkDto( UserDto dto ) throws BadRequestException {
@@ -132,6 +130,19 @@ public class UserServiceImpl implements UserService {
         if( incorrectDate( dto.getBorn() ) ) {
             throw new BadRequestException( INCORRECT_DATE_VALUE.getErrorMessage() );
         }
+    }
+
+    private void checkUserExist( String email ) throws BadCredentialsException, ConflictException {
+        if ( findByEmail( email ) != null )
+            throw new ConflictException( USER_ALREADY_EXIST.getErrorMessage() );
+    }
+
+    private User getAuthority( UserDto dto ) {
+        if ( dto.getAdmin() )
+            return new Admin();
+        if ( dto.getTicketSeller() )
+            return new TicketSeller();
+        return new Customer();
     }
 
     private boolean incorrectDate( Date date ) {

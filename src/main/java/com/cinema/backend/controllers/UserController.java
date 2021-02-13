@@ -1,6 +1,7 @@
 package com.cinema.backend.controllers;
 
 import com.cinema.backend.dto.UserDto;
+import com.cinema.backend.exceptions.BadCredentialsException;
 import com.cinema.backend.exceptions.BadRequestException;
 import com.cinema.backend.exceptions.ConflictException;
 import com.cinema.backend.exceptions.NotFoundException;
@@ -63,6 +64,8 @@ public class UserController {
             return new ResponseEntity<>( e.getMessage(), HttpStatus.CONFLICT );
         } catch ( BadRequestException e ) {
             return new ResponseEntity<>( e.getMessage(), HttpStatus.BAD_REQUEST );
+        } catch ( BadCredentialsException e ) {
+            return new ResponseEntity<>( e.getMessage(), HttpStatus.CHECKPOINT );
         }
     }
     @RequestMapping( path = "/{id}",

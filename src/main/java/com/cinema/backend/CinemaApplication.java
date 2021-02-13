@@ -1,7 +1,7 @@
 package com.cinema.backend;
 
-import com.cinema.backend.Security.ApplicationContextImpl;
-import com.cinema.backend.Security.ApplicationProperties;
+import com.cinema.backend.security.ApplicationContextImpl;
+import com.cinema.backend.security.ApplicationProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

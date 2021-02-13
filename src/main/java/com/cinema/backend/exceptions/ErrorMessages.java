@@ -7,6 +7,7 @@ public enum ErrorMessages {
     USER_ALREADY_EXIST( "User with given email is already exist" ),
     RECORD_NOT_FOUND( "Record with given ID is not found" ),
     USER_NOT_FOUND( "User with given ID is not found" ),
+    USER_NOT_EXIST( "User with given email is not exist" ),
     INCORRECT_EMAIL_FORMAT( "Given email address is not verified" ),
     INCORRECT_NAME_FORMAT( "First name and surname must contains only letters" ),
     INCORRECT_PASSWORD_FORMAT( "Password must contain at least 8 characters and at least 3 digits" ),
@@ -14,6 +15,7 @@ public enum ErrorMessages {
     INCORRECT_DATE_VALUE( "The date and time must be realistic" ),
     INCORRECT_PRICE( "The price must be a positive number" ),
     INCORRECT_DISCOUNT( "The discount must be 0 - 100 percentage" ),
+    NULL_POINT_EXCEPTION( "The given argument is equals null" ),
     PASSWORDS_NOT_MATCHES( "Passwords not matches" );
 
     private String errorMessage;

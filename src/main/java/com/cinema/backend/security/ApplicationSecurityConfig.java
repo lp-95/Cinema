@@ -1,6 +1,5 @@
-package com.cinema.backend.Security;
+package com.cinema.backend.security;
 
-import com.cinema.backend.services.UserService;
 import com.cinema.backend.services.UserServiceImpl;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,8 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static com.cinema.backend.Security.SecurityConstants.SIGN_IN_URL;
-import static com.cinema.backend.Security.SecurityConstants.SIGN_UP_URL;
+import static com.cinema.backend.security.SecurityConstants.SIGN_IN_URL;
+import static com.cinema.backend.security.SecurityConstants.SIGN_UP_URL;
 
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {

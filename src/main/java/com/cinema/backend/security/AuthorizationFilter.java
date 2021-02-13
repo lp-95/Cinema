@@ -1,4 +1,4 @@
-package com.cinema.backend.Security;
+package com.cinema.backend.security;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.cinema.backend.Security.SecurityConstants.*;
+import static com.cinema.backend.security.SecurityConstants.*;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 

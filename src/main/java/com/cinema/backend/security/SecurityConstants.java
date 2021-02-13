@@ -1,4 +1,4 @@
-package com.cinema.backend.Security;
+package com.cinema.backend.security;
 
 public class SecurityConstants {
     public static final String TOKEN_HEADER = "Authorization";

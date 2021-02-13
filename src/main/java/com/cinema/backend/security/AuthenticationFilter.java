@@ -1,6 +1,7 @@
-package com.cinema.backend.Security;
+package com.cinema.backend.security;
 
 import com.cinema.backend.dto.SignInRequest;
+import com.cinema.backend.exceptions.BadCredentialsException;
 import com.cinema.backend.services.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -20,7 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.cinema.backend.Security.SecurityConstants.*;
+import static com.cinema.backend.security.SecurityConstants.*;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -48,12 +49,18 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication( HttpServletRequest request, HttpServletResponse response,
                                              FilterChain chain, Authentication authResult ) throws IOException, ServletException {
         String email = ( (User) authResult.getPrincipal() ).getUsername();
-        String token = Jwts.builder().setSubject( email )
+        String token = Jwts.builder()
+                .setSubject( email )
                 .setExpiration( new Date( System.currentTimeMillis()  + EXPIRATION_TIME ))
                 .signWith( SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret() ).compact();
-        UserServiceImpl service = (UserServiceImpl) ApplicationContextImpl.getBean( "userService" );
-        com.cinema.backend.models.User user = service.findByEmail( email );
-        response.addHeader( TOKEN_HEADER, TOKEN_PREFIX + token );
-        response.addHeader( "UserID", String.valueOf( user.getId() ));
+        UserServiceImpl service = ( UserServiceImpl ) ApplicationContextImpl.getBean( "userService" );
+        com.cinema.backend.models.User user;
+        try {
+            user = service.findByEmail( email );
+            response.addHeader( TOKEN_HEADER, TOKEN_PREFIX + token );
+            response.addHeader( "UserID", String.valueOf( user.getId() ));
+        } catch ( BadCredentialsException ex ) {
+            ex.printStackTrace();
+        }
     }
 }
